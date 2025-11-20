@@ -84,14 +84,14 @@ const UploadView: React.FC<UploadViewProps> = ({ onUpload, onCancel }) => {
   return (
     <div className="max-w-3xl mx-auto pt-4 pb-20">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Upload New Content</h1>
-        <p className="text-slate-500">Share your voice with the world. Monetize your content with Premium subscriptions.</p>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Upload New Content</h1>
+        <p className="text-slate-500 dark:text-slate-400">Share your voice with the world. Monetize your content with Premium subscriptions.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* File Upload Area */}
         <div 
-          className={`relative border-2 border-dashed rounded-2xl p-10 text-center transition-colors ${dragActive ? 'border-[#00b0f0] bg-blue-50' : 'border-slate-200 hover:border-slate-300'}`}
+          className={`relative border-2 border-dashed rounded-2xl p-10 text-center transition-colors ${dragActive ? 'border-[#00b0f0] bg-blue-50 dark:bg-blue-900/20' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800'}`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
@@ -106,21 +106,21 @@ const UploadView: React.FC<UploadViewProps> = ({ onUpload, onCancel }) => {
           
           {file ? (
             <div className="flex flex-col items-center">
-               <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
+               <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mb-4">
                  <Icons.Mic size={32} />
                </div>
-               <h3 className="font-bold text-slate-900 text-lg mb-1">{file.name}</h3>
-               <p className="text-slate-500 text-sm">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+               <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-1">{file.name}</h3>
+               <p className="text-slate-500 dark:text-slate-400 text-sm">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
                <button type="button" onClick={() => setFile(null)} className="mt-4 text-red-500 text-sm font-bold hover:underline">Remove</button>
             </div>
           ) : (
             <div className="flex flex-col items-center pointer-events-none">
-               <div className="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mb-4">
+               <div className="w-16 h-16 bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-300 rounded-full flex items-center justify-center mb-4">
                  <Icons.Cloud size={32} />
                </div>
-               <h3 className="font-bold text-slate-900 text-lg mb-2">Drag & drop audio file</h3>
-               <p className="text-slate-500 text-sm mb-4">MP3, WAV, or AAC up to 100MB</p>
-               <span className="bg-slate-900 text-white px-6 py-2 rounded-full font-bold text-sm">Browse Files</span>
+               <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-2">Drag & drop audio file</h3>
+               <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">MP3, WAV, or AAC up to 100MB</p>
+               <span className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-2 rounded-full font-bold text-sm">Browse Files</span>
             </div>
           )}
         </div>
@@ -128,8 +128,8 @@ const UploadView: React.FC<UploadViewProps> = ({ onUpload, onCancel }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
            {/* Cover Art */}
            <div className="md:col-span-1">
-             <label className="block text-sm font-bold text-slate-700 mb-2">Cover Art</label>
-             <div className="relative aspect-square bg-slate-100 rounded-xl overflow-hidden border border-slate-200 group cursor-pointer">
+             <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Cover Art</label>
+             <div className="relative aspect-square bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 group cursor-pointer">
                 <input 
                   type="file" 
                   accept="image/*"
@@ -139,7 +139,7 @@ const UploadView: React.FC<UploadViewProps> = ({ onUpload, onCancel }) => {
                 {imageFile ? (
                   <img src={URL.createObjectURL(imageFile)} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
+                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
                      <Icons.ImageIcon size={32} className="mb-2" />
                      <span className="text-xs font-medium">Upload Image</span>
                   </div>
@@ -151,35 +151,35 @@ const UploadView: React.FC<UploadViewProps> = ({ onUpload, onCancel }) => {
            {/* Metadata Inputs */}
            <div className="md:col-span-2 space-y-6">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Title</label>
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Title</label>
                 <input 
                   type="text" 
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Episode Title"
-                  className="w-full p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00b0f0] font-medium"
+                  className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#00b0f0] font-medium placeholder:text-slate-400"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Description</label>
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Description</label>
                 <textarea 
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe your episode..."
                   rows={3}
-                  className="w-full p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00b0f0] font-medium resize-none"
+                  className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#00b0f0] font-medium resize-none placeholder:text-slate-400"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                   <label className="block text-sm font-bold text-slate-700 mb-2">Category</label>
+                   <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Category</label>
                    <select 
                      value={category}
                      onChange={(e) => setCategory(e.target.value)}
-                     className="w-full p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#00b0f0] font-medium bg-white"
+                     className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#00b0f0] font-medium"
                    >
                      {CATEGORIES.filter(c => c !== "All").map(c => (
                        <option key={c} value={c}>{c}</option>
@@ -188,14 +188,14 @@ const UploadView: React.FC<UploadViewProps> = ({ onUpload, onCancel }) => {
                 </div>
                 
                 <div className="flex items-end">
-                   <label className="flex items-center gap-3 p-3 border border-slate-200 rounded-xl w-full cursor-pointer hover:bg-slate-50 select-none">
+                   <label className="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-xl w-full cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 select-none transition-colors">
                       <input 
                         type="checkbox" 
                         checked={isPremium}
                         onChange={(e) => setIsPremium(e.target.checked)}
-                        className="w-5 h-5 text-[#00b0f0] rounded focus:ring-[#00b0f0]"
+                        className="w-5 h-5 text-[#00b0f0] rounded focus:ring-[#00b0f0] bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600"
                       />
-                      <span className="flex items-center gap-2 text-sm font-bold text-slate-700">
+                      <span className="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300">
                          <Icons.Lock size={16} className="text-yellow-500" /> Premium Only
                       </span>
                    </label>
@@ -204,11 +204,11 @@ const UploadView: React.FC<UploadViewProps> = ({ onUpload, onCancel }) => {
            </div>
         </div>
 
-        <div className="flex gap-4 pt-4 border-t border-slate-200">
+        <div className="flex gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
            <button 
              type="button" 
              onClick={onCancel}
-             className="px-6 py-3 rounded-xl font-bold text-slate-500 hover:bg-slate-100 transition-colors"
+             className="px-6 py-3 rounded-xl font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
            >
              Cancel
            </button>
@@ -216,7 +216,7 @@ const UploadView: React.FC<UploadViewProps> = ({ onUpload, onCancel }) => {
              type="submit"
              disabled={!file || !title || isSubmitting}
              className={`flex-1 px-6 py-3 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-2 ${
-               !file || !title || isSubmitting ? 'bg-slate-300 cursor-not-allowed' : 'bg-[#00b0f0] hover:bg-[#0050ff] shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+               !file || !title || isSubmitting ? 'bg-slate-300 dark:bg-slate-700 cursor-not-allowed' : 'bg-[#00b0f0] hover:bg-[#0050ff] shadow-lg hover:shadow-xl hover:-translate-y-0.5'
              }`}
            >
              {isSubmitting ? (

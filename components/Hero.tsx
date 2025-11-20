@@ -1,9 +1,10 @@
+
 import React from 'react';
 import { Icons } from './Icons';
 
-const Hero = () => {
+const Hero: React.FC = () => {
   return (
-    <div className="relative w-full h-[350px] md:h-[400px] rounded-2xl overflow-hidden mb-8 group shadow-xl shadow-slate-200">
+    <div className="relative w-full h-[350px] md:h-[400px] rounded-2xl mb-8 shadow-xl shadow-slate-200 overflow-hidden group">
       <img 
         src="https://picsum.photos/1200/800?random=99" 
         alt="Featured" 

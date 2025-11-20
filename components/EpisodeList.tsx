@@ -14,10 +14,10 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episodes, onPlay }) => {
       {episodes.map((ep) => (
         <div 
           key={ep.id} 
-          className="group flex items-center gap-4 p-3 rounded-xl hover:bg-white hover:shadow-sm hover:border-slate-100 border border-transparent transition-all cursor-pointer"
+          className="group flex items-center gap-4 p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm hover:border-slate-100 dark:hover:border-slate-700 border border-transparent transition-all cursor-pointer"
           onClick={() => onPlay(ep)}
         >
-          <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-slate-200 flex-shrink-0">
+          <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-700 flex-shrink-0">
             <img src={ep.imageUrl} alt={ep.title} className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
               <Icons.Play size={16} className="text-white fill-current" />
@@ -25,16 +25,16 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episodes, onPlay }) => {
           </div>
           
           <div className="flex-1 min-w-0">
-             <h4 className="font-bold text-sm text-slate-900 truncate group-hover:text-[#0050ff] transition-colors">{ep.title}</h4>
-             <p className="text-xs text-slate-500 truncate">{ep.description}</p>
+             <h4 className="font-bold text-sm text-slate-900 dark:text-slate-200 truncate group-hover:text-[#0050ff] dark:group-hover:text-[#3b82f6] transition-colors">{ep.title}</h4>
+             <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{ep.description}</p>
           </div>
 
-          <div className="hidden sm:flex flex-col items-end gap-1 text-xs text-slate-400">
+          <div className="hidden sm:flex flex-col items-end gap-1 text-xs text-slate-400 dark:text-slate-500">
             <span className="font-medium">{ep.date}</span>
             <span className="flex items-center gap-1"><Icons.Clock size={10} /> {ep.duration}</span>
           </div>
 
-          <button className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#0050ff] hover:border-[#0050ff] bg-white">
+          <button className="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-[#0050ff] dark:hover:text-[#3b82f6] hover:border-[#0050ff] dark:hover:border-[#3b82f6] bg-white dark:bg-slate-900">
              <Icons.Play size={12} fill="currentColor" className="ml-0.5" />
           </button>
         </div>

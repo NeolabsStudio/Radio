@@ -23,6 +23,11 @@ function App() {
   const [currentTrack, setCurrentTrack] = useState<AudioTrack | null>(null);
   const [activeCategory, setActiveCategory] = useState("All");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
 
   const handlePlayStation = async (station: Station) => {
     if (currentStationId === station.id) {
@@ -193,8 +198,8 @@ function App() {
              <div className="mb-10">
                <SectionHeader title="Catch Up" />
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  <div className="bg-slate-50 rounded-2xl p-6">
-                     <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 transition-colors">
+                     <h3 className="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                        <Icons.Clock size={18} className="text-[#00b0f0]"/> Latest Segments
                      </h3>
                      <EpisodeList episodes={MOCK_EPISODES.slice(0,3)} onPlay={handlePlayEpisode} />
@@ -203,7 +208,7 @@ function App() {
                       <div className="absolute top-0 right-0 w-64 h-64 bg-[#00b0f0] opacity-10 rounded-full translate-x-1/3 -translate-y-1/3 blur-3xl"></div>
                       <div className="relative z-10 h-full flex flex-col justify-center">
                         <span className="text-[#00b0f0] font-bold uppercase tracking-widest text-xs mb-2">Creator Spotlight</span>
-                        <h3 className="text-2xl font-bold mb-2">Become a Creator</h3>
+                        <h3 className="text-2xl font-bold mb-2 text-white">Become a Creator</h3>
                         <p className="text-slate-400 text-sm mb-6 line-clamp-3">
                            Share your stories with the world. Upload your own podcasts and audio shows directly to NCOR.
                         </p>
@@ -259,7 +264,7 @@ function App() {
            <>
              <div className="mb-8">
                <SectionHeader title="Latest Episodes" />
-               <div className="bg-white rounded-2xl p-2 shadow-sm border border-slate-100">
+               <div className="bg-white dark:bg-slate-900 rounded-2xl p-2 shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
                  <EpisodeList episodes={MOCK_EPISODES} onPlay={handlePlayEpisode} />
                </div>
              </div>
@@ -286,18 +291,18 @@ function App() {
                <input 
                  type="text" 
                  placeholder="Search for topics, shows, or creators..." 
-                 className="w-full p-4 pl-12 rounded-xl border border-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#00b0f0]"
+                 className="w-full p-4 pl-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-[#00b0f0] placeholder:text-slate-400 transition-colors"
                />
                <Icons.Search className="absolute left-4 top-4 text-slate-400" size={20} />
              </div>
              
-             <h2 className="text-xl font-bold text-slate-900 mb-4">Browse Categories</h2>
+             <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 transition-colors">Browse Categories</h2>
              <div className="flex flex-wrap gap-3 mb-8">
                 {CATEGORIES.map(cat => (
                   <button 
                     key={cat} 
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-6 py-3 rounded-lg font-semibold transition-all ${activeCategory === cat ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:border-[#00b0f0] hover:text-[#00b0f0]'}`}
+                    className={`px-6 py-3 rounded-lg font-semibold transition-all ${activeCategory === cat ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-[#00b0f0] hover:text-[#00b0f0]'}`}
                   >
                     {cat}
                   </button>
@@ -321,7 +326,7 @@ function App() {
       case 'library':
          return (
             <div className="pt-4">
-               <h1 className="text-3xl font-bold text-slate-900 mb-6">Your Favorites</h1>
+               <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-6 transition-colors">Your Favorites</h1>
                {filteredStations.length > 0 ? (
                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                    {filteredStations.map((station) => (
@@ -335,9 +340,9 @@ function App() {
                   ))}
                  </div>
                ) : (
-                <div className="flex flex-col items-center justify-center h-[40vh] text-slate-400">
-                  <Icons.Heart size={64} className="mb-4 text-slate-200" />
-                  <h2 className="text-xl font-bold text-slate-600">Your Library is empty</h2>
+                <div className="flex flex-col items-center justify-center h-[40vh] text-slate-400 dark:text-slate-500">
+                  <Icons.Heart size={64} className="mb-4 text-slate-200 dark:text-slate-700" />
+                  <h2 className="text-xl font-bold text-slate-600 dark:text-slate-400">Your Library is empty</h2>
                   <p>Subscribe to premium content or favorite shows to see them here.</p>
                 </div>
                )}
@@ -348,7 +353,7 @@ function App() {
         return (
           <>
             <div className="flex items-center justify-between mb-8">
-               <h1 className="text-3xl font-bold text-slate-900 capitalize">{activePage}</h1>
+               <h1 className="text-3xl font-bold text-slate-900 dark:text-white capitalize transition-colors">{activePage}</h1>
                
                <div className="flex gap-2 overflow-x-auto no-scrollbar max-w-[50%]">
                   {CATEGORIES.map(cat => (
@@ -358,7 +363,7 @@ function App() {
                       className={`px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-all ${
                         activeCategory === cat 
                           ? 'bg-[#00b0f0] text-white' 
-                          : 'bg-white text-slate-500 border border-slate-200 hover:border-[#00b0f0]'
+                          : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-[#00b0f0]'
                       }`}
                     >
                       {cat}
@@ -388,36 +393,38 @@ function App() {
   };
 
   return (
-    <div className="bg-[#f9f9f9] min-h-screen flex pb-24 font-sans text-slate-900 selection:bg-[#b3e5fc] selection:text-blue-900">
-      <Sidebar activePage={activePage} onNavigate={setActivePage} />
+    <div className={theme}>
+      <div className="bg-[#f9f9f9] dark:bg-[#020617] min-h-screen flex pb-24 font-sans text-slate-900 dark:text-slate-100 selection:bg-[#b3e5fc] selection:text-blue-900 transition-colors duration-300">
+        <Sidebar activePage={activePage} onNavigate={setActivePage} theme={theme} toggleTheme={toggleTheme} />
 
-      <main className="flex-1 md:ml-64 p-4 md:p-8 max-w-[1600px] mx-auto w-full overflow-x-hidden">
-        {/* Mobile Header */}
-        <div className="md:hidden flex items-center justify-between mb-6 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-          <div className="flex items-center gap-2 text-slate-900">
-             <div className="w-8 h-8 rounded-full bg-[#00b0f0] flex items-center justify-center text-white">
-               <Icons.Radio size={16} />
-             </div>
-             <span className="font-bold text-xl tracking-tight">{activePage === 'home' ? 'NCOR' : activePage.charAt(0).toUpperCase() + activePage.slice(1)}</span>
+        <main className="flex-1 md:ml-64 p-4 md:p-8 max-w-[1600px] mx-auto w-full overflow-x-hidden">
+          {/* Mobile Header */}
+          <div className="md:hidden flex items-center justify-between mb-6 bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
+            <div className="flex items-center gap-2 text-slate-900 dark:text-white">
+              <div className="w-8 h-8 rounded-full bg-[#00b0f0] flex items-center justify-center text-white">
+                <Icons.Radio size={16} />
+              </div>
+              <span className="font-bold text-xl tracking-tight">{activePage === 'home' ? 'NCOR' : activePage.charAt(0).toUpperCase() + activePage.slice(1)}</span>
+            </div>
+            <button className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"><Icons.Menu /></button>
           </div>
-          <button className="text-slate-500 hover:text-slate-900"><Icons.Menu /></button>
-        </div>
 
-        {errorMsg && (
-          <div className="fixed top-4 right-4 bg-red-600 text-white px-6 py-4 rounded-xl shadow-2xl z-50 flex items-center gap-3 animate-bounce cursor-pointer" onClick={() => setErrorMsg(null)}>
-            <Icons.X size={20} />
-            <span className="font-medium">{errorMsg}</span>
-          </div>
-        )}
+          {errorMsg && (
+            <div className="fixed top-4 right-4 bg-red-600 text-white px-6 py-4 rounded-xl shadow-2xl z-50 flex items-center gap-3 animate-bounce cursor-pointer" onClick={() => setErrorMsg(null)}>
+              <Icons.X size={20} />
+              <span className="font-medium">{errorMsg}</span>
+            </div>
+          )}
 
-        {renderContent()}
-      </main>
+          {renderContent()}
+        </main>
 
-      <AudioPlayer 
-        track={currentTrack} 
-        status={audioStatus} 
-        setStatus={setAudioStatus}
-      />
+        <AudioPlayer 
+          track={currentTrack} 
+          status={audioStatus} 
+          setStatus={setAudioStatus}
+        />
+      </div>
     </div>
   );
 }

@@ -19,7 +19,7 @@ const StationCard: React.FC<StationCardProps> = ({ station, currentStationId, st
     <div className="group relative flex flex-col gap-3 cursor-pointer w-full">
       {/* Image Container */}
       <div 
-        className="relative w-full aspect-square rounded-xl overflow-hidden shadow-sm group-hover:shadow-lg transition-all duration-300"
+        className="relative w-full aspect-square rounded-xl overflow-hidden shadow-sm group-hover:shadow-lg transition-all duration-300 bg-slate-200 dark:bg-slate-800"
         onClick={() => onPlay(station)}
       >
         <img 
@@ -66,12 +66,12 @@ const StationCard: React.FC<StationCardProps> = ({ station, currentStationId, st
       <div className="flex flex-col gap-0.5">
         <h3 
           onClick={() => onPlay(station)}
-          className={`font-bold text-base leading-tight mb-1 transition-colors ${isCurrent ? 'text-[#0050ff]' : 'text-slate-900 group-hover:text-[#0050ff]'}`}
+          className={`font-bold text-base leading-tight mb-1 transition-colors ${isCurrent ? 'text-[#0050ff] dark:text-[#3b82f6]' : 'text-slate-900 dark:text-slate-100 group-hover:text-[#0050ff] dark:group-hover:text-[#3b82f6]'}`}
         >
           {station.title}
         </h3>
         <div className="flex items-center justify-between">
-            <p className="text-slate-500 text-xs font-medium flex items-center gap-1">
+            <p className="text-slate-500 dark:text-slate-400 text-xs font-medium flex items-center gap-1">
                {station.isUserGenerated ? <Icons.User size={10} /> : <Icons.Radio size={10} />}
                {station.author}
             </p>

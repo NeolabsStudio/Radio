@@ -26,7 +26,9 @@ import {
   DollarSign,
   Lock,
   BarChart2,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 export const Icons = {
@@ -55,5 +57,7 @@ export const Icons = {
   DollarSign,
   Lock,
   BarChart2,
-  ImageIcon
+  ImageIcon,
+  Sun,
+  Moon
 };

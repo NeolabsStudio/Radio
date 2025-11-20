@@ -11,7 +11,7 @@ interface SectionHeaderProps {
 const SectionHeader: React.FC<SectionHeaderProps> = ({ title, actionLabel, onAction }) => {
   return (
     <div className="flex items-center justify-between mb-4 px-1">
-      <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+      <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 transition-colors">
         {title}
       </h2>
       {actionLabel && onAction && (

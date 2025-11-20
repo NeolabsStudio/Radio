@@ -15,90 +15,90 @@ const CreatorDashboard: React.FC<CreatorDashboardProps> = ({ userStations }) => 
     <div className="pt-4">
        <div className="flex items-center justify-between mb-8">
          <div>
-            <h1 className="text-3xl font-bold text-slate-900">Creator Studio</h1>
-            <p className="text-slate-500">Manage your content and earnings.</p>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Creator Studio</h1>
+            <p className="text-slate-500 dark:text-slate-400">Manage your content and earnings.</p>
          </div>
-         <button className="bg-slate-900 text-white px-6 py-2.5 rounded-full font-bold text-sm flex items-center gap-2">
+         <button className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-2.5 rounded-full font-bold text-sm flex items-center gap-2 hover:opacity-90 transition-opacity">
             <Icons.Share2 size={16} /> Share Profile
          </button>
        </div>
 
        {/* Stats Overview */}
        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
              <div className="flex items-center gap-4 mb-2">
-                <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-[#00b0f0]">
+                <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-[#00b0f0]">
                    <Icons.BarChart2 size={20} />
                 </div>
-                <span className="text-slate-500 font-medium">Total Plays</span>
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Total Plays</span>
              </div>
-             <p className="text-3xl font-bold text-slate-900">{totalPlays.toLocaleString()}</p>
+             <p className="text-3xl font-bold text-slate-900 dark:text-white">{totalPlays.toLocaleString()}</p>
              <span className="text-xs text-green-600 font-bold flex items-center gap-1">
                 ▲ 12% this week
              </span>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
              <div className="flex items-center gap-4 mb-2">
-                <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center text-purple-500">
+                <div className="w-10 h-10 bg-purple-50 dark:bg-purple-900/20 rounded-full flex items-center justify-center text-purple-500">
                    <Icons.User size={20} />
                 </div>
-                <span className="text-slate-500 font-medium">Subscribers</span>
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Subscribers</span>
              </div>
-             <p className="text-3xl font-bold text-slate-900">842</p>
+             <p className="text-3xl font-bold text-slate-900 dark:text-white">842</p>
              <span className="text-xs text-green-600 font-bold flex items-center gap-1">
                 ▲ 5 new today
              </span>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
              <div className="flex items-center gap-4 mb-2">
-                <div className="w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center text-yellow-600">
+                <div className="w-10 h-10 bg-yellow-50 dark:bg-yellow-900/20 rounded-full flex items-center justify-center text-yellow-600">
                    <Icons.DollarSign size={20} />
                 </div>
-                <span className="text-slate-500 font-medium">Earnings</span>
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Earnings</span>
              </div>
-             <p className="text-3xl font-bold text-slate-900">${totalRevenue.toFixed(2)}</p>
+             <p className="text-3xl font-bold text-slate-900 dark:text-white">${totalRevenue.toFixed(2)}</p>
              <span className="text-xs text-slate-400">Payout pending</span>
           </div>
        </div>
 
-       <h2 className="text-xl font-bold text-slate-900 mb-4">Your Content</h2>
-       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+       <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Your Content</h2>
+       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden transition-colors">
           <table className="w-full text-left">
-             <thead className="bg-slate-50 border-b border-slate-200">
+             <thead className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
                 <tr>
-                   <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Title</th>
-                   <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Date</th>
-                   <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
-                   <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Plays</th>
+                   <th className="p-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Title</th>
+                   <th className="p-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Date</th>
+                   <th className="p-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+                   <th className="p-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Plays</th>
                 </tr>
              </thead>
-             <tbody className="divide-y divide-slate-100">
+             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {userStations.length > 0 ? userStations.map((station) => (
-                   <tr key={station.id} className="hover:bg-slate-50/50 transition-colors">
+                   <tr key={station.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                       <td className="p-4">
                          <div className="flex items-center gap-3">
-                            <img src={station.imageUrl} alt="" className="w-10 h-10 rounded bg-slate-200 object-cover" />
+                            <img src={station.imageUrl} alt="" className="w-10 h-10 rounded bg-slate-200 dark:bg-slate-700 object-cover" />
                             <div className="flex flex-col">
-                               <span className="font-bold text-sm text-slate-900">{station.title}</span>
-                               <span className="text-xs text-slate-500">{station.category}</span>
+                               <span className="font-bold text-sm text-slate-900 dark:text-white">{station.title}</span>
+                               <span className="text-xs text-slate-500 dark:text-slate-400">{station.category}</span>
                             </div>
                          </div>
                       </td>
-                      <td className="p-4 text-sm text-slate-500">Today</td>
+                      <td className="p-4 text-sm text-slate-500 dark:text-slate-400">Today</td>
                       <td className="p-4">
                          {station.isPremium ? (
-                            <span className="px-2 py-1 rounded bg-yellow-100 text-yellow-800 text-xs font-bold">Premium</span>
+                            <span className="px-2 py-1 rounded bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-500 text-xs font-bold">Premium</span>
                          ) : (
-                            <span className="px-2 py-1 rounded bg-green-100 text-green-800 text-xs font-bold">Free</span>
+                            <span className="px-2 py-1 rounded bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-500 text-xs font-bold">Free</span>
                          )}
                       </td>
-                      <td className="p-4 text-sm font-bold text-slate-900 text-right">0</td>
+                      <td className="p-4 text-sm font-bold text-slate-900 dark:text-white text-right">0</td>
                    </tr>
                 )) : (
                    <tr>
-                      <td colSpan={4} className="p-10 text-center text-slate-400">
+                      <td colSpan={4} className="p-10 text-center text-slate-400 dark:text-slate-500">
                          You haven't uploaded any content yet.
                       </td>
                    </tr>
