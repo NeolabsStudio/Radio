@@ -8,9 +8,10 @@ interface StationCardProps {
   currentStationId?: string;
   status: AudioStatus;
   onPlay: (station: Station) => void;
+  onToggleFavorite?: (station: Station, e: React.MouseEvent) => void;
 }
 
-const StationCard: React.FC<StationCardProps> = ({ station, currentStationId, status, onPlay }) => {
+const StationCard: React.FC<StationCardProps> = ({ station, currentStationId, status, onPlay, onToggleFavorite }) => {
   const isCurrent = currentStationId === station.id;
   const isPlaying = isCurrent && status === AudioStatus.PLAYING;
   const isGenerating = isCurrent && status === AudioStatus.GENERATING;
@@ -53,9 +54,19 @@ const StationCard: React.FC<StationCardProps> = ({ station, currentStationId, st
            )}
         </div>
 
+        {/* Favorite Button */}
+        {onToggleFavorite && (
+            <button 
+                onClick={(e) => onToggleFavorite(station, e)}
+                className={`absolute top-2 right-2 w-8 h-8 rounded-full backdrop-blur-md flex items-center justify-center transition-all ${station.isFavorite ? 'bg-[#00b0f0] text-white' : 'bg-black/30 text-white hover:bg-black/50'}`}
+            >
+                <Icons.Heart size={14} fill={station.isFavorite ? "currentColor" : "none"} />
+            </button>
+        )}
+
         {/* Live Indicator */}
         {isCurrent && (status === AudioStatus.PLAYING || status === AudioStatus.GENERATING) && (
-          <div className="absolute top-2 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1 shadow-sm">
+          <div className="absolute bottom-2 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1 shadow-sm">
             <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
             PLAYING
           </div>

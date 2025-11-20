@@ -10,20 +10,42 @@ import EpisodeList from './components/EpisodeList';
 import UploadView from './components/UploadView';
 import CreatorDashboard from './components/CreatorDashboard';
 import { Icons } from './components/Icons';
-import { MOCK_STATIONS, CATEGORIES, MOCK_EPISODES, MOCK_SCHEDULE } from './constants';
+import { CATEGORIES, MOCK_SCHEDULE } from './constants';
 import { Station, AudioStatus, AudioTrack, ViewPage, ContentType, Episode } from './types';
 import { generateStationContent } from './services/geminiService';
 import { getAudioContext, decodeAudioData } from './services/audioUtils';
+import * as DB from './services/db';
 
 function App() {
   const [activePage, setActivePage] = useState<ViewPage>('home');
-  const [allStations, setAllStations] = useState<Station[]>(MOCK_STATIONS);
+  const [allStations, setAllStations] = useState<Station[]>([]);
+  const [allEpisodes, setAllEpisodes] = useState<Episode[]>([]);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  
   const [currentStationId, setCurrentStationId] = useState<string | undefined>(undefined);
   const [audioStatus, setAudioStatus] = useState<AudioStatus>(AudioStatus.IDLE);
   const [currentTrack, setCurrentTrack] = useState<AudioTrack | null>(null);
   const [activeCategory, setActiveCategory] = useState("All");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  // --- Backend Initialization ---
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await DB.initDB();
+        const stations = await DB.getAllStations();
+        const episodes = await DB.getAllEpisodes();
+        setAllStations(stations);
+        setAllEpisodes(episodes);
+        setIsLoadingData(false);
+      } catch (err) {
+        console.error("Database failed to load", err);
+        setErrorMsg("Failed to load database content.");
+      }
+    };
+    fetchData();
+  }, []);
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
@@ -56,10 +78,21 @@ function App() {
     try {
       let audioBuffer: AudioBuffer;
 
-      if (station.isUserGenerated && station.audioUrl) {
-        // Handle User Uploaded Audio (fetch blob URL and decode)
-        const response = await fetch(station.audioUrl);
-        const arrayBuffer = await response.arrayBuffer();
+      if (station.isUserGenerated) {
+        // Handle User Uploaded Audio (Priority: Blob > URL)
+        let arrayBuffer: ArrayBuffer;
+        
+        if (station.audioBlob) {
+           // Case 1: Read from Blob (fastest for local uploads)
+           arrayBuffer = await station.audioBlob.arrayBuffer();
+        } else if (station.audioUrl) {
+           // Case 2: Fetch from URL (legacy or remote)
+           const response = await fetch(station.audioUrl);
+           arrayBuffer = await response.arrayBuffer();
+        } else {
+           throw new Error("No audio source found for this station.");
+        }
+
         // Native decode for user files (mp3/wav)
         audioBuffer = await ctx.decodeAudioData(arrayBuffer);
       } else {
@@ -97,9 +130,25 @@ function App() {
     }
   };
 
-  const handleUpload = (newStation: Station) => {
-    setAllStations(prev => [newStation, ...prev]);
-    setActivePage('studio');
+  const handleUpload = async (newStation: Station) => {
+    try {
+      await DB.addStation(newStation);
+      // Refresh local state
+      const stations = await DB.getAllStations();
+      setAllStations(stations);
+      setActivePage('studio');
+    } catch (e) {
+      console.error("Upload failed", e);
+      setErrorMsg("Failed to save content to database.");
+    }
+  };
+
+  const handleToggleFavorite = async (station: Station, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const updatedStation = await DB.toggleStationFavorite(station.id);
+    if (updatedStation) {
+      setAllStations(prev => prev.map(s => s.id === updatedStation.id ? updatedStation : s));
+    }
   };
 
   // Filter Logic
@@ -112,7 +161,7 @@ function App() {
     if (activePage === 'radio') stations = getStationsByType('radio');
     else if (activePage === 'podcasts') stations = getStationsByType('podcast');
     else if (activePage === 'audiobooks') stations = getStationsByType('audiobook');
-    else if (activePage === 'library') stations = stations.filter(s => s.isPremium); // Mock Library as Premium items
+    else if (activePage === 'library') stations = stations.filter(s => s.isFavorite); // Library uses favorites now
     
     if (activeCategory !== "All") {
       stations = stations.filter(s => s.category === activeCategory);
@@ -120,6 +169,17 @@ function App() {
     
     return stations;
   }, [activePage, activeCategory, allStations]);
+
+  if (isLoadingData) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+         <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-[#00b0f0] border-t-transparent rounded-full animate-spin"></div>
+            <div className="text-white font-bold">Loading Database...</div>
+         </div>
+      </div>
+    );
+  }
 
   // Render Page Content
   const renderContent = () => {
@@ -144,6 +204,7 @@ function App() {
                       currentStationId={currentStationId}
                       status={audioStatus}
                       onPlay={handlePlayStation}
+                      onToggleFavorite={handleToggleFavorite}
                     />
                   </div>
                 ))}
@@ -166,6 +227,7 @@ function App() {
                         currentStationId={currentStationId}
                         status={audioStatus}
                         onPlay={handlePlayStation}
+                        onToggleFavorite={handleToggleFavorite}
                       />
                     </div>
                   ))}
@@ -188,6 +250,7 @@ function App() {
                       currentStationId={currentStationId}
                       status={audioStatus}
                       onPlay={handlePlayStation}
+                      onToggleFavorite={handleToggleFavorite}
                     />
                   </div>
                 ))}
@@ -202,7 +265,7 @@ function App() {
                      <h3 className="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                        <Icons.Clock size={18} className="text-[#00b0f0]"/> Latest Segments
                      </h3>
-                     <EpisodeList episodes={MOCK_EPISODES.slice(0,3)} onPlay={handlePlayEpisode} />
+                     <EpisodeList episodes={allEpisodes.slice(0,3)} onPlay={handlePlayEpisode} />
                   </div>
                   <div className="bg-slate-900 rounded-2xl p-6 text-white relative overflow-hidden">
                       <div className="absolute top-0 right-0 w-64 h-64 bg-[#00b0f0] opacity-10 rounded-full translate-x-1/3 -translate-y-1/3 blur-3xl"></div>
@@ -240,6 +303,7 @@ function App() {
                         currentStationId={currentStationId}
                         status={audioStatus}
                         onPlay={handlePlayStation}
+                        onToggleFavorite={handleToggleFavorite}
                       />
                    ))}
                  </div>
@@ -265,7 +329,7 @@ function App() {
              <div className="mb-8">
                <SectionHeader title="Latest Episodes" />
                <div className="bg-white dark:bg-slate-900 rounded-2xl p-2 shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
-                 <EpisodeList episodes={MOCK_EPISODES} onPlay={handlePlayEpisode} />
+                 <EpisodeList episodes={allEpisodes} onPlay={handlePlayEpisode} />
                </div>
              </div>
 
@@ -278,6 +342,7 @@ function App() {
                     currentStationId={currentStationId}
                     status={audioStatus}
                     onPlay={handlePlayStation}
+                    onToggleFavorite={handleToggleFavorite}
                   />
                 ))}
              </div>
@@ -317,6 +382,7 @@ function App() {
                     currentStationId={currentStationId}
                     status={audioStatus}
                     onPlay={handlePlayStation}
+                    onToggleFavorite={handleToggleFavorite}
                   />
                 ))}
              </div>
@@ -336,6 +402,7 @@ function App() {
                       currentStationId={currentStationId}
                       status={audioStatus}
                       onPlay={handlePlayStation}
+                      onToggleFavorite={handleToggleFavorite}
                     />
                   ))}
                  </div>
@@ -343,7 +410,7 @@ function App() {
                 <div className="flex flex-col items-center justify-center h-[40vh] text-slate-400 dark:text-slate-500">
                   <Icons.Heart size={64} className="mb-4 text-slate-200 dark:text-slate-700" />
                   <h2 className="text-xl font-bold text-slate-600 dark:text-slate-400">Your Library is empty</h2>
-                  <p>Subscribe to premium content or favorite shows to see them here.</p>
+                  <p>Mark shows as favorites to see them here.</p>
                 </div>
                )}
             </div>
@@ -380,6 +447,7 @@ function App() {
                   currentStationId={currentStationId}
                   status={audioStatus}
                   onPlay={handlePlayStation}
+                  onToggleFavorite={handleToggleFavorite}
                 />
               )) : (
                 <div className="col-span-full py-10 text-center text-slate-400">

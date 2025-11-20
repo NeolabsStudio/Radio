@@ -25,8 +25,13 @@ export interface Station {
   author: string;
   isPremium: boolean;
   isUserGenerated: boolean;
-  audioUrl?: string; // Direct URL for uploaded content
+  audioUrl?: string; // Direct URL for uploaded content (optional if audioBlob is present)
+  audioBlob?: Blob; // Direct binary storage for local uploads
   duration?: string;
+  
+  // Persistence
+  isFavorite?: boolean;
+  createdAt?: number;
 }
 
 export interface AudioTrack {

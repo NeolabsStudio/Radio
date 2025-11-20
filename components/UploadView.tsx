@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Icons } from './Icons';
 import { CATEGORIES } from '../constants';
 import { Station } from '../types';
+import { blobToBase64 } from '../services/db';
 
 interface UploadViewProps {
   onUpload: (newStation: Station) => void;
@@ -50,35 +51,43 @@ const UploadView: React.FC<UploadViewProps> = ({ onUpload, onCancel }) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !category || !file) return;
 
     setIsSubmitting(true);
 
-    // Simulate upload delay
-    setTimeout(() => {
-      const audioUrl = URL.createObjectURL(file);
-      const imageUrl = imageFile ? URL.createObjectURL(imageFile) : `https://picsum.photos/400/400?random=${Date.now()}`;
+    try {
+        // Image handling: Convert to Base64 for easy display
+        let imageBase64 = `https://picsum.photos/400/400?random=${Date.now()}`;
+        if (imageFile) {
+            imageBase64 = await blobToBase64(imageFile);
+        }
 
-      const newStation: Station = {
-        id: `user-upload-${Date.now()}`,
-        title,
-        description: description || "No description provided.",
-        imageUrl,
-        category,
-        type: 'podcast', // User uploads default to podcast type
-        author: 'Me (Creator)',
-        isPremium,
-        isUserGenerated: true,
-        audioUrl,
-        voice: 'Native',
-        prompt: ''
-      };
+        // Audio handling: Store Blob directly for performance/size reasons
+        const newStation: Station = {
+            id: `user-upload-${Date.now()}`,
+            title,
+            description: description || "No description provided.",
+            imageUrl: imageBase64,
+            category,
+            type: 'podcast', // User uploads default to podcast type
+            author: 'Me (Creator)',
+            isPremium,
+            isUserGenerated: true,
+            audioBlob: file, // Store the raw File object (which is a Blob)
+            voice: 'Native',
+            prompt: '',
+            isFavorite: false,
+            createdAt: Date.now()
+        };
 
-      onUpload(newStation);
-      setIsSubmitting(false);
-    }, 1500);
+        onUpload(newStation);
+    } catch (error) {
+        console.error("Error processing file", error);
+    } finally {
+        setIsSubmitting(false);
+    }
   };
 
   return (
@@ -222,7 +231,7 @@ const UploadView: React.FC<UploadViewProps> = ({ onUpload, onCancel }) => {
              {isSubmitting ? (
                <>
                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                 Uploading...
+                 Saving to Database...
                </>
              ) : (
                <>
